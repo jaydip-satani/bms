@@ -21,6 +21,7 @@
             <thead class="thead-light">
                 <tr>
                     <th>Account ID</th>
+                    <th>Account Type</th>
                     <th>Account Holder</th>
                     <th>Balance</th>
                     <th>Status</th>
@@ -38,7 +39,7 @@
                         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
 
                         stmt = con.createStatement();
-                        String query = "SELECT a.account_id, u.username, a.balance " +
+                        String query = "SELECT a.account_id, u.username,a.account_type, a.balance ,a.status " +
                                        "FROM accounts a " +
                                        "JOIN users u ON a.user_id = u.user_id"; 
 
@@ -49,9 +50,10 @@
                 %>
                 <tr>
                     <td><%= rs.getInt("account_id") %></td>
+                    <td><%= rs.getString("account_type") %></td>
                     <td><%= rs.getString("username") %></td> 
                     <td>$<%= rs.getDouble("balance") %></td>
-                    <%-- <td><%= rs.getString("status") %></td> --%>
+                    <td><%= rs.getString("status") %></td>
                 </tr>
                 <%
                             } while (rs.next());

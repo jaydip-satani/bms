@@ -19,6 +19,7 @@
         <table class="table table-bordered mt-4">
             <thead class="thead-light">
                 <tr>
+                    <th>Account Number</th>
                     <th>Date</th>
                     <th>Description</th>
                     <th>Amount</th>
@@ -32,14 +33,13 @@
                     ResultSet rs = null;
                     Integer userId = (Integer) userSession.getAttribute("user_id");
 
-                  
                     out.println("User ID: " + userId);
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb","root",""); 
 
-                         String sql = "SELECT t.transaction_date, t.transaction_type, t.amount, a.balance " +
+                        String sql = "SELECT a.account_id, t.transaction_date, t.transaction_type, t.amount, a.balance " +
                                      "FROM transactions t " +
                                      "JOIN accounts a ON t.account_id = a.account_id " + 
                                      "WHERE a.user_id = ?";
@@ -48,15 +48,17 @@
                         rs = ps.executeQuery();
 
                         if (!rs.isBeforeFirst()) { 
-                            out.println("<tr><td colspan='4'>No transactions found.</td></tr>");
+                            out.println("<tr><td colspan='5'>No transactions found.</td></tr>");
                         } else {
                             while (rs.next()) {
+                                String accountNumber = rs.getString("account_id");
                                 String transactionDate = rs.getString("transaction_date");
                                 String transactionType = rs.getString("transaction_type");
                                 double amount = rs.getDouble("amount");
                                 double balance = rs.getDouble("balance");
                                 %>
                                 <tr>
+                                    <td><%= accountNumber %></td>
                                     <td><%= transactionDate %></td>
                                     <td><%= transactionType %></td>
                                     <td><%= (transactionType.equals("withdrawal") ? "-" : "") + "₹" + String.format("%.2f", amount) %></td>
@@ -69,7 +71,6 @@
                         e.printStackTrace(); 
                         out.println("Error: " + e.getMessage()); 
                     } finally {
-                       
                         if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
                         if (ps != null) try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
                         if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
