@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2024 at 12:29 PM
+-- Generation Time: Nov 17, 2024 at 05:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,8 @@ INSERT INTO `accounts` (`account_id`, `user_id`, `account_type`, `balance`, `cre
 (2, 3, 'checking', 2113.00, '2024-10-18 15:28:02', '2024-11-12 06:42:10', 'Active'),
 (3, 2, 'checking', 2499.00, '2024-10-18 15:28:02', '2024-10-19 11:45:09', 'closed'),
 (4, 3, 'savings', 3000.00, '2024-10-18 15:28:02', '2024-11-12 06:33:16', 'Active'),
-(5, 2, 'savings', 500.00, '2024-10-18 15:28:02', '2024-11-12 06:33:21', 'Active');
+(5, 2, 'savings', 500.00, '2024-10-18 15:28:02', '2024-11-13 12:06:14', 'closed'),
+(6, 15, 'savings', 0.00, '2024-11-17 09:45:32', '2024-11-17 09:45:32', 'active');
 
 -- --------------------------------------------------------
 
@@ -70,8 +71,8 @@ CREATE TABLE `atm_card_requests` (
 --
 
 INSERT INTO `atm_card_requests` (`request_id`, `user_id`, `account_id`, `card_type`, `status`, `request_date`, `approved_date`, `contact_number`) VALUES
-(1, 2, 1, 'debit', 'pending', '2024-11-12 09:23:51', NULL, 1),
-(2, 2, 3, 'credit', 'pending', '2024-11-12 09:29:38', NULL, 121212);
+(1, 2, 1, 'debit', 'approved', '2024-11-12 09:23:51', NULL, 1),
+(2, 2, 3, 'credit', 'approved', '2024-11-12 09:29:38', NULL, 121212);
 
 -- --------------------------------------------------------
 
@@ -120,7 +121,7 @@ CREATE TABLE `cheque_book_requests` (
 --
 
 INSERT INTO `cheque_book_requests` (`request_id`, `user_id`, `account_id`, `contact_number`, `status`, `request_date`) VALUES
-(1, 2, 1, '1', 'pending', '2024-11-12 09:40:03');
+(1, 2, 1, '1', 'approved', '2024-11-12 09:40:03');
 
 -- --------------------------------------------------------
 
@@ -153,7 +154,7 @@ INSERT INTO `loans` (`loan_id`, `user_id`, `loan_amount`, `interest_rate`, `loan
 (7, 2, 1.00, 5.00, 'approved', '2024-10-19 11:34:35', '2024-10-19 12:30:34', 'personal'),
 (8, 2, 1.00, 5.00, 'approved', '2024-10-19 11:35:11', '2024-10-23 06:14:01', 'personal'),
 (9, 2, 1.00, 5.00, 'rejected', '2024-10-19 11:35:19', '2024-10-23 06:14:05', 'personal'),
-(10, 2, 111.00, 5.00, 'pending', '2024-11-12 06:42:52', '2024-11-12 06:42:52', 'home');
+(10, 2, 111.00, 5.00, 'approved', '2024-11-12 06:42:52', '2024-11-17 09:13:51', 'home');
 
 -- --------------------------------------------------------
 
@@ -178,8 +179,8 @@ INSERT INTO `transactions` (`transaction_id`, `account_id`, `transaction_type`, 
 (1, 1, 'deposit', 1000.00, '2024-10-18 15:28:02', 'approved'),
 (2, 2, 'withdrawal', 500.00, '2024-10-18 15:28:02', 'approved'),
 (3, 1, 'transfer', 300.00, '2024-10-18 15:28:02', 'approved'),
-(4, 2, 'deposit', 700.00, '2024-10-18 15:28:02', ''),
-(5, 3, 'withdrawal', 200.00, '2024-10-18 15:28:02', '');
+(4, 2, 'deposit', 700.00, '2024-10-18 15:28:02', 'approved'),
+(5, 3, 'withdrawal', 200.00, '2024-10-18 15:28:02', 'approved');
 
 -- --------------------------------------------------------
 
@@ -203,10 +204,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `role`, `email`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 'admin1', 'admin1', 'admin', 'admin1@example.com', '1234567890', '2024-10-18 15:28:02', '2024-11-12 06:12:10'),
-(2, 'customer1', 'customer1', 'customer', 'customer1@example.com', '1234567891', '2024-10-18 15:28:02', '2024-11-12 06:34:32'),
-(3, 'customer2', 'customer2', 'customer', 'customer2@example.com', '1234567892', '2024-10-18 15:28:02', '2024-11-11 11:11:20'),
-(4, 'employee1', 'employee1', 'employee', 'employee1@example.com', '1234567893', '2024-10-18 15:28:02', '2024-11-12 06:55:42');
+(1, 'admin1', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin', 'admin1@example.com', '1234567890', '2024-10-18 15:28:02', '2024-11-17 09:38:47'),
+(2, 'customer1', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'customer1@example.com', '1234567891', '2024-10-18 15:28:02', '2024-11-17 09:40:17'),
+(3, 'customer2', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'customer2@example.com', '1234567892', '2024-10-18 15:28:02', '2024-11-17 09:40:28'),
+(4, 'employee1', '2fdc0177057d3a5c6c2c0821e01f4fa8d90f9a3bb7afd82b0db526af98d68de8', 'employee', 'employee1@example.com', '1234567893', '2024-10-18 15:28:02', '2024-11-17 09:39:30'),
+(6, 'jaydip', '2fdc0177057d3a5c6c2c0821e01f4fa8d90f9a3bb7afd82b0db526af98d68de8', 'employee', 'jaydip@jaydip.com', '1463783147', '2024-11-17 09:13:18', '2024-11-17 09:39:35'),
+(9, 'jaydip1', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'jaydip@jay1dip.com', '7298412674', '2024-11-17 09:14:33', '2024-11-17 09:40:33'),
+(10, 'ja', '3702fc1866630796050c50e9c829bd32fde7cc4c883f28e3e4ca430307c485b0', 'customer', 'ja@ja.com', '1234213413', '2024-11-17 09:34:45', '2024-11-17 09:34:45'),
+(11, 'jaa', '3702fc1866630796050c50e9c829bd32fde7cc4c883f28e3e4ca430307c485b0', 'customer', 'ja@jaaa.com', '1313131313', '2024-11-17 09:42:37', '2024-11-17 09:42:37'),
+(14, 'jb', 'da114fe251e57acdab774919e86f16f09e9341d913db8ad4ae808ac63ea9f2c7', 'customer', 'jb@jb.com', '1313131313', '2024-11-17 09:43:34', '2024-11-17 09:43:34'),
+(15, 'jbb', 'da114fe251e57acdab774919e86f16f09e9341d913db8ad4ae808ac63ea9f2c7', 'customer', 'jb@jbb.com', '1324124312', '2024-11-17 09:45:32', '2024-11-17 09:45:32');
 
 --
 -- Indexes for dumped tables
@@ -272,7 +279,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `atm_card_requests`
@@ -308,7 +315,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
