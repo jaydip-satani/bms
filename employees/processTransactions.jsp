@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, javax.servlet.*, javax.servlet.http.*, java.util.*" %>
+<%
     HttpSession userSession = request.getSession(false);
     if (userSession == null || userSession.getAttribute("username") == null || !userSession.getAttribute("role").equals("employee")) {
         response.sendRedirect("../login.jsp"); 

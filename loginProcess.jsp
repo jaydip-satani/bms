@@ -1,4 +1,19 @@
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*, java.security.*, java.nio.charset.*" %>
+<%@ page language="java" %>
+
+<%!
+
+    public String hashPassword(String passwordToHash) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashedBytes = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashedBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+%>
+
 <%
     String username = request.getParameter("username");
     String password = request.getParameter("password"); 
@@ -7,21 +22,22 @@
     ResultSet rs = null;
 
     try {
-       
-        Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
+        String hashedPassword = hashPassword(password);
 
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
 
         String query = "SELECT user_id, username, role FROM Users WHERE username = ? AND password = ?";
         ps = con.prepareStatement(query);
         ps.setString(1, username);
-        ps.setString(2, password); 
+        ps.setString(2, hashedPassword); 
 
         rs = ps.executeQuery();
 
         if (rs.next()) {
             String role = rs.getString("role");
             int userId = rs.getInt("user_id");
+
             session.setAttribute("username", username);
             session.setAttribute("role", role);
             session.setAttribute("user_id", userId);
@@ -37,11 +53,13 @@
             request.setAttribute("errorMessage", "Invalid username or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+    } catch (NoSuchAlgorithmException e) {
+        out.println("<h3>Error: Unable to hash the password. " + e.getMessage() + "</h3>");
     } catch (Exception e) {
         e.printStackTrace();
     } finally {
-        if (rs != null) rs.close();
-        if (ps != null) ps.close();
-        if (con != null) con.close();
+        if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (ps != null) try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
     }
 %>

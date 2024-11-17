@@ -50,7 +50,7 @@
             String accountId = rs.getString("account_id");
             String contactNumber = rs.getString("contact_number");
             String status = rs.getString("status");
-<%>
+%>
                 <tr>
                     <td><%= requestId %></td>
                     <td><%= customerName %></td>

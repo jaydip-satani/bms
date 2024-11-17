@@ -7,13 +7,11 @@
         return; 
     }
 
-    // Retrieve session data and request parameters
     int userId = (Integer) userSession.getAttribute("user_id");
     String accountId = request.getParameter("accountId");
     String cardType = request.getParameter("cardType");
     String contactNumber = request.getParameter("contactNumber");
 
-    // Debug output to check if values are retrieved correctly
     out.println("Debug Info: <br>");
     out.println("User ID: " + userId + "<br>");
     out.println("Account ID: " + accountId + "<br>");
@@ -24,10 +22,9 @@
     PreparedStatement pstmt = null;
     
     try {
-        Class.forName("com.mysql.cj.jdbc.Driver"); // Updated driver class for MySQL
+        Class.forName("com.mysql.cj.jdbc.Driver"); 
         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
         
-        // Insert query for atm_card_requests with the new structure
         String sql = "INSERT INTO atm_card_requests (user_id, account_id, card_type, contact_number, status) VALUES (?, ?, ?, ?, 'pending')";
         pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, userId);

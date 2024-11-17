@@ -24,6 +24,7 @@
                     <div class="card-body">
                         <p class="text-center">Welcome, Employee. Choose an option below:</p>
                         <div class="list-group">
+                          <a href="customerRegistration.jsp" class="list-group-item list-group-item-action">Add New Customer</a>
                             <a href="manageCustomerAccounts.jsp" class="list-group-item list-group-item-action">Manage Customer Accounts</a>
                             <a href="processTransactions.jsp" class="list-group-item list-group-item-action">Process Transactions</a>
                             <a href="reviewLoanApplications.jsp" class="list-group-item list-group-item-action">Review Loan Applications</a>

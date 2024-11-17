@@ -25,6 +25,7 @@
                     <div class="card-body">
                         <p class="text-center">Welcome, Admin. Choose an option below:</p>
                         <div class="list-group">
+                         <a href="employeeRegistration.jsp" class="list-group-item list-group-item-action">Add New Employee</a>
                             <a href="manageUsers.jsp" class="list-group-item list-group-item-action">Manage Users</a>
                             <a href="viewAccounts.jsp" class="list-group-item list-group-item-action">View All Accounts</a>
                             <a href="viewTransactions.jsp" class="list-group-item list-group-item-action">View Transactions</a>

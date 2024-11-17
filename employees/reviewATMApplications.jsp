@@ -1,52 +1,84 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*, javax.servlet.*, javax.servlet.http.*, java.util.*" %>
+<%
+    HttpSession userSession = request.getSession(false);
+    if (userSession == null || userSession.getAttribute("username") == null || !userSession.getAttribute("role").equals("employee")) {
+        response.sendRedirect("../login.jsp"); 
+        return; 
+    }
+%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cheque Book Requests</title>
+    <title>Review ATM Card Requests</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-
-<div class="container mt-5">
-    <h2>Cheque Book Requests</h2>
-
-    <!-- Table displaying all requests -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Customer Name</th>
-                <th>Account ID</th>
-                <th>Contact Number</th>
-                <th>Request Date</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="request" items="${chequeBookRequests}">
+<body class="bg-light">
+    <div class="container">
+        <h1 class="mt-5">Review ATM Card Requests</h1>
+        <table class="table table-striped mt-4">
+            <thead class="thead-light">
                 <tr>
-                    <td>${request.request_id}</td>
-                    <td>${request.customer_name}</td>
-                    <td>${request.account_id}</td>
-                    <td>${request.contact_number}</td>
-                    <td>${request.request_date}</td>
-                    <td>${request.status}</td>
+                    <th>Request ID</th>
+                    <th>Customer Name</th>
+                    <th>Account ID</th>
+                    <th>Contact Number</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+<%
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
+
+        String sql = "SELECT ar.request_id, u.username, ar.account_id, ar.contact_number, ar.status " +
+                     "FROM atm_card_requests ar " +
+                     "JOIN users u ON ar.user_id = u.user_id " +
+                     "WHERE ar.status = 'pending'";  
+
+        ps = conn.prepareStatement(sql);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int requestId = rs.getInt("request_id");
+            String customerName = rs.getString("username");
+            String accountId = rs.getString("account_id");
+            String contactNumber = rs.getString("contact_number");
+            String status = rs.getString("status");
+%>
+                <tr>
+                    <td><%= requestId %></td>
+                    <td><%= customerName %></td>
+                    <td><%= accountId %></td>
+                    <td><%= contactNumber %></td>
+                    <td><%= status %></td>
                     <td>
-                        <a href="approveRequest.jsp?id=${request.request_id}" class="btn btn-success btn-sm">Approve</a>
-                        <a href="rejectRequest.jsp?id=${request.request_id}" class="btn btn-danger btn-sm">Reject</a>
+                        <form method="post" action="processAtmRequest.jsp">
+                            <input type="hidden" name="requestId" value="<%= requestId %>">
+                            <button type="submit" name="action" value="approved" class="btn btn-sm btn-success">Approve</button>
+                            <button type="submit" name="action" value="rejected" class="btn btn-sm btn-danger">Reject</button>
+                        </form>
                     </td>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<%
+        }
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+        out.println("<h3>Error fetching ATM requests: " + e.getMessage() + "</h3>");
+    } finally {
+        if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (ps != null) try { ps.close(); } catch (SQLException e) { e.printStackTrace(); }
+        if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+    }
+%>
+            </tbody>
+        </table>
+        <a href="employeeDashboard.jsp" class="btn btn-primary mt-3">Back to Dashboard</a>
+    </div>
 </body>
 </html>
