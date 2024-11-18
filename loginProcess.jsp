@@ -1,4 +1,4 @@
-<%@ page import="java.sql.*, java.security.*, java.nio.charset.*" %>
+<%@ page import="java.sql.*, java.security.*, java.nio.charset.*, java.net.*" %>
 <%@ page language="java" %>
 
 <%!
@@ -12,6 +12,21 @@
         }
         return sb.toString();
     }
+
+    public String getClientIp(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return ipAddress;
+    }
+
 %>
 
 <%
@@ -24,19 +39,31 @@
     try {
         String hashedPassword = hashPassword(password);
 
+        String clientIp = getClientIp(request);
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankingdb", "root", "");
 
         String query = "SELECT user_id, username, role FROM Users WHERE username = ? AND password = ?";
         ps = con.prepareStatement(query);
         ps.setString(1, username);
-        ps.setString(2, hashedPassword); 
+        ps.setString(2, hashedPassword);
 
         rs = ps.executeQuery();
 
         if (rs.next()) {
             String role = rs.getString("role");
             int userId = rs.getInt("user_id");
+
+            String sessionId = session.getId();
+
+            String insertLogQuery = "INSERT INTO session_logs (user_id, session_id, ip_address, status) VALUES (?, ?, ?, 'active')";
+            PreparedStatement logPs = con.prepareStatement(insertLogQuery);
+            logPs.setInt(1, userId);
+            logPs.setString(2, sessionId);
+            logPs.setString(3, clientIp);
+            logPs.executeUpdate();
+            logPs.close();
 
             session.setAttribute("username", username);
             session.setAttribute("role", role);

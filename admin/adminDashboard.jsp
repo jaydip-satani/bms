@@ -46,6 +46,7 @@
                             <a href="viewTransactions.jsp" class="list-group-item list-group-item-action">View Transactions</a>
                             <a href="manageLoans.jsp" class="list-group-item list-group-item-action">Manage Loans</a>
                             <a href="generateReports.jsp" class="list-group-item list-group-item-action">Generate Reports</a>
+                            <a href="sessionLogs.jsp" class="list-group-item list-group-item-action">Session Logs</a>
                         </div>
                     </div>
                     <div class="card-footer text-center">
