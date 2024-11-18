@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                         <label for="initial_balance">Initial Balance</label>
-                        <input type="number" step="0.01" class="form-control" id="initial_balance" name="initial_balance" placeholder="Enter initial balance" required>
+                        <input type="number" step="0.01" class="form-control" id="balance" name="balance" placeholder="Enter initial balance" required>
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-block">Register & Open Account</button>

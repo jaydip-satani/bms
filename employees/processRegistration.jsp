@@ -12,6 +12,7 @@
     String email = request.getParameter("email");
     String phone = request.getParameter("phone");
     String accountType = request.getParameter("accountType"); 
+    String balance = request.getParameter("balance"); 
 
     String DB_URL = "jdbc:mysql://localhost:3306/bankingdb";
     String DB_USER = "root";
@@ -58,11 +59,12 @@
         }
 
         if (userId != -1) {
-            String accountSql = "INSERT INTO accounts (user_id, account_type, balance, status, created_at) VALUES (?, ?, 0.00, 'active', NOW())";
+            String accountSql = "INSERT INTO accounts (user_id, account_type, balance, status, created_at) VALUES (?, ?, ?, 'active', NOW())";
             accountPstmt = conn.prepareStatement(accountSql);
 
             accountPstmt.setInt(1, userId);
             accountPstmt.setString(2, accountType); 
+            accountPstmt.setString(3, balance); 
 
             int accountRowsInserted = accountPstmt.executeUpdate();
 
