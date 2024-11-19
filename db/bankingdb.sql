@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2024 at 05:27 PM
+-- Generation Time: Nov 19, 2024 at 11:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,12 +42,11 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`account_id`, `user_id`, `account_type`, `balance`, `created_at`, `updated_at`, `status`) VALUES
-(1, 2, 'savings', 1389.00, '2024-10-18 15:28:02', '2024-11-12 06:42:10', 'closed'),
-(2, 3, 'checking', 2113.00, '2024-10-18 15:28:02', '2024-11-12 06:42:10', 'Active'),
+(1, 2, 'savings', 68.00, '2024-10-18 15:28:02', '2024-11-19 03:10:59', 'closed'),
+(2, 3, 'checking', 3434.00, '2024-10-18 15:28:02', '2024-11-19 03:10:59', 'Active'),
 (3, 2, 'checking', 2499.00, '2024-10-18 15:28:02', '2024-10-19 11:45:09', 'closed'),
 (4, 3, 'savings', 3000.00, '2024-10-18 15:28:02', '2024-11-12 06:33:16', 'Active'),
-(5, 2, 'savings', 500.00, '2024-10-18 15:28:02', '2024-11-13 12:06:14', 'closed'),
-(6, 15, 'savings', 0.00, '2024-11-17 09:45:32', '2024-11-17 09:45:32', 'active');
+(5, 2, 'savings', 500.00, '2024-10-18 15:28:02', '2024-11-13 12:06:14', 'closed');
 
 -- --------------------------------------------------------
 
@@ -159,6 +158,42 @@ INSERT INTO `loans` (`loan_id`, `user_id`, `loan_amount`, `interest_rate`, `loan
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `session_logs`
+--
+
+CREATE TABLE `session_logs` (
+  `log_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session_id` varchar(100) NOT NULL,
+  `login_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `logout_time` timestamp NULL DEFAULT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `status` enum('active','logged_out') NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `session_logs`
+--
+
+INSERT INTO `session_logs` (`log_id`, `user_id`, `session_id`, `login_time`, `logout_time`, `ip_address`, `status`) VALUES
+(1, 1, '90AA052167B238C381B83D2D589692B6', '2024-11-18 07:02:21', '2024-11-18 07:04:40', '0:0:0:0:0:0:0:1', 'logged_out'),
+(2, 1, 'E482B4C5EACD3FAEF0FD6F51635556A1', '2024-11-18 07:10:25', '2024-11-18 07:12:02', '0:0:0:0:0:0:0:1', 'logged_out'),
+(3, 1, 'F48BB1CBDD1BE91A76D33250AE8F01A3', '2024-11-18 07:12:15', '2024-11-18 07:13:13', '0:0:0:0:0:0:0:1', 'logged_out'),
+(4, 4, 'E461E701DFA01C4FD4B40B4A925423CE', '2024-11-18 07:13:36', '2024-11-18 07:14:52', '0:0:0:0:0:0:0:1', 'logged_out'),
+(5, 2, '8382811F2DD9FF53D3BFAE9AE90EC379', '2024-11-18 07:15:11', '2024-11-18 07:16:19', '0:0:0:0:0:0:0:1', 'logged_out'),
+(6, 2, '31C7C92CCF5FB95E444F5304662DAC05', '2024-11-18 07:16:59', '2024-11-18 07:17:25', '0:0:0:0:0:0:0:1', 'logged_out'),
+(7, 4, '6A9846CC9487671F8BFFACBAF2CED92E', '2024-11-18 07:17:30', '2024-11-18 07:22:45', '0:0:0:0:0:0:0:1', 'logged_out'),
+(9, 2, '280FA9E79A4C70F4F03496F843022CB2', '2024-11-19 02:50:03', '2024-11-19 03:11:30', '0:0:0:0:0:0:0:1', 'logged_out'),
+(10, 4, '757853ABE8836B57D0F1530503758861', '2024-11-19 03:11:34', '2024-11-19 03:11:53', '0:0:0:0:0:0:0:1', 'logged_out'),
+(11, 1, 'CD559C287F171407345CECE830B76955', '2024-11-19 03:11:57', '2024-11-19 03:12:19', '0:0:0:0:0:0:0:1', 'logged_out'),
+(12, 2, '09B6428D2C6BA10B6F0F9D66C62B11C6', '2024-11-19 07:21:54', '2024-11-19 07:22:44', '0:0:0:0:0:0:0:1', 'logged_out'),
+(13, 1, '4E69C061E1C143C0DE8BA6EA8B679299', '2024-11-19 07:22:59', '2024-11-19 07:23:00', '0:0:0:0:0:0:0:1', 'logged_out'),
+(14, 4, 'E717EB49DB7FBDE43E4837BD4B414EEF', '2024-11-19 07:23:07', '2024-11-19 07:24:01', '0:0:0:0:0:0:0:1', 'logged_out'),
+(15, 1, '111611DF41DFB468CD2846769EC17737', '2024-11-19 07:24:05', '2024-11-19 07:25:56', '0:0:0:0:0:0:0:1', 'logged_out');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `transactions`
 --
 
@@ -180,7 +215,8 @@ INSERT INTO `transactions` (`transaction_id`, `account_id`, `transaction_type`, 
 (2, 2, 'withdrawal', 500.00, '2024-10-18 15:28:02', 'approved'),
 (3, 1, 'transfer', 300.00, '2024-10-18 15:28:02', 'approved'),
 (4, 2, 'deposit', 700.00, '2024-10-18 15:28:02', 'approved'),
-(5, 3, 'withdrawal', 200.00, '2024-10-18 15:28:02', 'approved');
+(5, 3, 'withdrawal', 200.00, '2024-10-18 15:28:02', 'approved'),
+(6, 1, 'withdrawal', 1221.00, '2024-11-19 03:10:59', 'approved');
 
 -- --------------------------------------------------------
 
@@ -207,13 +243,7 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `role`, `email`, `phone`
 (1, 'admin1', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin', 'admin1@example.com', '1234567890', '2024-10-18 15:28:02', '2024-11-17 09:38:47'),
 (2, 'customer1', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'customer1@example.com', '1234567891', '2024-10-18 15:28:02', '2024-11-17 09:40:17'),
 (3, 'customer2', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'customer2@example.com', '1234567892', '2024-10-18 15:28:02', '2024-11-17 09:40:28'),
-(4, 'employee1', '2fdc0177057d3a5c6c2c0821e01f4fa8d90f9a3bb7afd82b0db526af98d68de8', 'employee', 'employee1@example.com', '1234567893', '2024-10-18 15:28:02', '2024-11-17 09:39:30'),
-(6, 'jaydip', '2fdc0177057d3a5c6c2c0821e01f4fa8d90f9a3bb7afd82b0db526af98d68de8', 'employee', 'jaydip@jaydip.com', '1463783147', '2024-11-17 09:13:18', '2024-11-17 09:39:35'),
-(9, 'jaydip1', 'b6c45863875e34487ca3c155ed145efe12a74581e27befec5aa661b8ee8ca6dd', 'customer', 'jaydip@jay1dip.com', '7298412674', '2024-11-17 09:14:33', '2024-11-17 09:40:33'),
-(10, 'ja', '3702fc1866630796050c50e9c829bd32fde7cc4c883f28e3e4ca430307c485b0', 'customer', 'ja@ja.com', '1234213413', '2024-11-17 09:34:45', '2024-11-17 09:34:45'),
-(11, 'jaa', '3702fc1866630796050c50e9c829bd32fde7cc4c883f28e3e4ca430307c485b0', 'customer', 'ja@jaaa.com', '1313131313', '2024-11-17 09:42:37', '2024-11-17 09:42:37'),
-(14, 'jb', 'da114fe251e57acdab774919e86f16f09e9341d913db8ad4ae808ac63ea9f2c7', 'customer', 'jb@jb.com', '1313131313', '2024-11-17 09:43:34', '2024-11-17 09:43:34'),
-(15, 'jbb', 'da114fe251e57acdab774919e86f16f09e9341d913db8ad4ae808ac63ea9f2c7', 'customer', 'jb@jbb.com', '1324124312', '2024-11-17 09:45:32', '2024-11-17 09:45:32');
+(4, 'employee1', '9d586dc0a48a2ed04839e0a69750893438e8d379e2fa45e94e82c5b3abb00daa', 'employee', 'employee1@example.com', '1234567893', '2024-10-18 15:28:02', '2024-11-18 06:56:32');
 
 --
 -- Indexes for dumped tables
@@ -254,6 +284,13 @@ ALTER TABLE `cheque_book_requests`
 --
 ALTER TABLE `loans`
   ADD PRIMARY KEY (`loan_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `session_logs`
+--
+ALTER TABLE `session_logs`
+  ADD PRIMARY KEY (`log_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -306,10 +343,16 @@ ALTER TABLE `loans`
   MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `session_logs`
+--
+ALTER TABLE `session_logs`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -352,6 +395,12 @@ ALTER TABLE `cheque_book_requests`
 --
 ALTER TABLE `loans`
   ADD CONSTRAINT `loans_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `session_logs`
+--
+ALTER TABLE `session_logs`
+  ADD CONSTRAINT `session_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `transactions`
