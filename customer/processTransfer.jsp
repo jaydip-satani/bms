@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*, javax.servlet.http.*, javax.servlet.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="javax.servlet.*" %>
+
 <%
     HttpSession userSession = request.getSession(false);
     if (userSession == null || userSession.getAttribute("username") == null || !userSession.getAttribute("role").equals("customer")) {
@@ -74,6 +80,15 @@
                         creditStmt.setDouble(1, amount);
                         creditStmt.setInt(2, Integer.parseInt(toAccountId));
                         creditStmt.executeUpdate();
+
+                        String transQuery = "INSERT INTO transactions (account_id, transaction_type, amount, transaction_date, status) VALUES (?, ?, ?, NOW(), 'pending')";
+                        PreparedStatement transactionPstmt = con.prepareStatement(transQuery);  // Use transQuery here
+                        String type = "withdrawal";  // This is for the 'from' account transaction type
+                        transactionPstmt.setInt(1, Integer.parseInt(fromAccountId));  // Set from account_id
+                        transactionPstmt.setString(2, type);  // Set transaction type (withdrawal)
+                        transactionPstmt.setDouble(3, amount);  // Set the transfer amount
+                        transactionPstmt.executeUpdate();
+
 
                         con.commit(); 
                         transferSuccessful = true;
